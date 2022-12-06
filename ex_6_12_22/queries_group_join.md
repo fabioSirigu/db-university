@@ -21,7 +21,7 @@ GROUP BY `numero dipartimento`;
 
 ## JOIN
 ## Selezionare tutti gli studenti iscritti al Corso di Laurea in Economia
-SELECT `students`.`*`, `degrees`.`name` 
+SELECT `students`.`*`, `degrees`.`name` AS `degrees name`
 FROM `students` 
 JOIN `degrees` ON `students`.`degree_id` = `degrees`.`id` 
 WHERE `degrees`.`name` = 'Corso di Laurea in Economia';
@@ -39,14 +39,25 @@ JOIN `teachers` ON `teachers`.`id` = `course_teacher`.`teacher_id`
 WHERE `teachers`.`id` = 44;
 
 ## Selezionare tutti gli studenti con i dati relativi al corso di laurea a cui sono iscritti e il relativo dipartimento, in ordine alfabetico per cognome e nome
-SELECT `students`.`name` AS 'Name',`students`.`surname` AS 'Surname', `degrees`.`*` , `departments`.`name` AS 'Department Name' 
+SELECT `students`.`name` AS `Student Name`,`students`.`surname` AS `Student Surname`, `degrees`.`*` , `departments`.`name` AS `Department Name`
 FROM `degrees` 
 JOIN `students` ON `degrees`.`id` = `students`.`degree_id` 
 JOIN `departments` ON `degrees`.`department_id` = `departments`.`id` 
 ORDER BY `students`.`surname` ASC, `students`.`name` ASC;
 
 ## Selezionare tutti i corsi di laurea con i relativi corsi e insegnanti
-
+SELECT  `degrees`.`*`, `teachers`.`name` AS `name teacher`, `teachers`.`surname` AS `surname teacher`, `courses`.`name` AS `name course` 
+FROM `course_teacher` 
+JOIN `teachers` ON `teachers`.`id` = `course_teacher`.`teacher_id` 
+JOIN `courses` ON `course_teacher`.`course_id` = `courses`.`id` 
+JOIN `degrees` ON `degrees`.`id` = `courses`.`degree_id`;
 ## Selezionare tutti i docenti che insegnano nel Dipartimento di Matematica (54)
+SELECT DISTINCT `teachers`.`*`, `departments`.`name` AS `Department Name` 
+FROM `course_teacher` 
+JOIN `teachers` ON `teachers`.`id` = `course_teacher`.`teacher_id` 
+JOIN `courses` ON `course_teacher`.`course_id` = `courses`.`id` 
+JOIN `degrees` ON `degrees`.`id` = `courses`.`degree_id` 
+JOIN `departments` ON `degrees`.`department_id` = `departments`.`id` 
+WHERE `departments`.`name` = 'Dipartimento di Matematica';
 
 ## BONUS: Selezionare per ogni studente quanti tentativi d’esame ha sostenuto per superare ciascuno dei suoi esami
